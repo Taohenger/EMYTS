@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.company.mapper.CompanyInfoMapper">
+    
+    <resultMap type="CompanyInfo" id="CompanyInfoResult">
+        <result property="companyId"    column="Company_Id"    />
+        <result property="companyUsername"    column="Company_Username"    />
+        <result property="companyPassword"    column="Company_Password"    />
+        <result property="companyName"    column="Company_Name"    />
+        <result property="companyAddress"    column="Company_Address"    />
+        <result property="companyRegisteredcapital"    column="Company_RegisteredCapital"    />
+        <result property="companyIndustry"    column="Company_Industry"    />
+        <result property="companyNumberofenterprises"    column="Company_NumberOfEnterprises"    />
+    </resultMap>
+
+    <sql id="selectCompanyInfoVo">
+        select Company_Id, Company_Username, Company_Password, Company_Name, Company_Address, Company_RegisteredCapital, Company_Industry, Company_NumberOfEnterprises from company_info
+    </sql>
+
+    <select id="selectCompanyInfoList" parameterType="CompanyInfo" resultMap="CompanyInfoResult">
+        <include refid="selectCompanyInfoVo"/>
+        <where>  
+            <if test="companyUsername != null  and companyUsername != ''"> and Company_Username like concat('%', #{companyUsername}, '%')</if>
+            <if test="companyPassword != null  and companyPassword != ''"> and Company_Password = #{companyPassword}</if>
+            <if test="companyName != null  and companyName != ''"> and Company_Name like concat('%', #{companyName}, '%')</if>
+            <if test="companyAddress != null  and companyAddress != ''"> and Company_Address = #{companyAddress}</if>
+            <if test="companyRegisteredcapital != null  and companyRegisteredcapital != ''"> and Company_RegisteredCapital = #{companyRegisteredcapital}</if>
+            <if test="companyIndustry != null  and companyIndustry != ''"> and Company_Industry = #{companyIndustry}</if>
+            <if test="companyNumberofenterprises != null  and companyNumberofenterprises != ''"> and Company_NumberOfEnterprises = #{companyNumberofenterprises}</if>
+        </where>
+    </select>
+    
+    <select id="selectCompanyInfoByCompanyId" parameterType="Long" resultMap="CompanyInfoResult">
+        <include refid="selectCompanyInfoVo"/>
+        where Company_Id = #{companyId}
+    </select>
+        
+    <insert id="insertCompanyInfo" parameterType="CompanyInfo" useGeneratedKeys="true" keyProperty="companyId">
+        insert into company_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="companyUsername != null">Company_Username,</if>
+            <if test="companyPassword != null">Company_Password,</if>
+            <if test="companyName != null">Company_Name,</if>
+            <if test="companyAddress != null">Company_Address,</if>
+            <if test="companyRegisteredcapital != null">Company_RegisteredCapital,</if>
+            <if test="companyIndustry != null">Company_Industry,</if>
+            <if test="companyNumberofenterprises != null">Company_NumberOfEnterprises,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="companyUsername != null">#{companyUsername},</if>
+            <if test="companyPassword != null">#{companyPassword},</if>
+            <if test="companyName != null">#{companyName},</if>
+            <if test="companyAddress != null">#{companyAddress},</if>
+            <if test="companyRegisteredcapital != null">#{companyRegisteredcapital},</if>
+            <if test="companyIndustry != null">#{companyIndustry},</if>
+            <if test="companyNumberofenterprises != null">#{companyNumberofenterprises},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCompanyInfo" parameterType="CompanyInfo">
+        update company_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="companyUsername != null">Company_Username = #{companyUsername},</if>
+            <if test="companyPassword != null">Company_Password = #{companyPassword},</if>
+            <if test="companyName != null">Company_Name = #{companyName},</if>
+            <if test="companyAddress != null">Company_Address = #{companyAddress},</if>
+            <if test="companyRegisteredcapital != null">Company_RegisteredCapital = #{companyRegisteredcapital},</if>
+            <if test="companyIndustry != null">Company_Industry = #{companyIndustry},</if>
+            <if test="companyNumberofenterprises != null">Company_NumberOfEnterprises = #{companyNumberofenterprises},</if>
+        </trim>
+        where Company_Id = #{companyId}
+    </update>
+
+    <delete id="deleteCompanyInfoByCompanyId" parameterType="Long">
+        delete from company_info where Company_Id = #{companyId}
+    </delete>
+
+    <delete id="deleteCompanyInfoByCompanyIds" parameterType="String">
+        delete from company_info where Company_Id in 
+        <foreach item="companyId" collection="array" open="(" separator="," close=")">
+            #{companyId}
+        </foreach>
+    </delete>
+</mapper>

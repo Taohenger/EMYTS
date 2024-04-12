@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.favorite.mapper.FavoriteInfoMapper">
+    
+    <resultMap type="FavoriteInfo" id="FavoriteInfoResult">
+        <result property="favoriteId"    column="Favorite_Id"    />
+        <result property="favoriteUserid"    column="Favorite_UserId"    />
+        <result property="favoriteType"    column="Favorite_Type"    />
+        <result property="favoriteTargetid"    column="Favorite_TargetId"    />
+    </resultMap>
+
+    <sql id="selectFavoriteInfoVo">
+        select Favorite_Id, Favorite_UserId, Favorite_Type, Favorite_TargetId from favorite_info
+    </sql>
+
+    <select id="selectFavoriteInfoList" parameterType="FavoriteInfo" resultMap="FavoriteInfoResult">
+        <include refid="selectFavoriteInfoVo"/>
+        <where>  
+            <if test="favoriteUserid != null "> and Favorite_UserId = #{favoriteUserid}</if>
+            <if test="favoriteType != null  and favoriteType != ''"> and Favorite_Type = #{favoriteType}</if>
+            <if test="favoriteTargetid != null "> and Favorite_TargetId = #{favoriteTargetid}</if>
+        </where>
+    </select>
+    
+    <select id="selectFavoriteInfoByFavoriteId" parameterType="Long" resultMap="FavoriteInfoResult">
+        <include refid="selectFavoriteInfoVo"/>
+        where Favorite_Id = #{favoriteId}
+    </select>
+        
+    <insert id="insertFavoriteInfo" parameterType="FavoriteInfo" useGeneratedKeys="true" keyProperty="favoriteId">
+        insert into favorite_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="favoriteUserid != null">Favorite_UserId,</if>
+            <if test="favoriteType != null">Favorite_Type,</if>
+            <if test="favoriteTargetid != null">Favorite_TargetId,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="favoriteUserid != null">#{favoriteUserid},</if>
+            <if test="favoriteType != null">#{favoriteType},</if>
+            <if test="favoriteTargetid != null">#{favoriteTargetid},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFavoriteInfo" parameterType="FavoriteInfo">
+        update favorite_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="favoriteUserid != null">Favorite_UserId = #{favoriteUserid},</if>
+            <if test="favoriteType != null">Favorite_Type = #{favoriteType},</if>
+            <if test="favoriteTargetid != null">Favorite_TargetId = #{favoriteTargetid},</if>
+        </trim>
+        where Favorite_Id = #{favoriteId}
+    </update>
+
+    <delete id="deleteFavoriteInfoByFavoriteId" parameterType="Long">
+        delete from favorite_info where Favorite_Id = #{favoriteId}
+    </delete>
+
+    <delete id="deleteFavoriteInfoByFavoriteIds" parameterType="String">
+        delete from favorite_info where Favorite_Id in 
+        <foreach item="favoriteId" collection="array" open="(" separator="," close=")">
+            #{favoriteId}
+        </foreach>
+    </delete>
+</mapper>

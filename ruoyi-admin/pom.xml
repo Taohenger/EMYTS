@@ -61,6 +61,13 @@
             <artifactId>ruoyi-generator</artifactId>
         </dependency>
 
+        <!--人才模块-->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>ruoyi-eyms</artifactId>
+        </dependency>
+
+
     </dependencies>
 
     <build>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.resume.mapper.ResumeInfoMapper">
+    
+    <resultMap type="ResumeInfo" id="ResumeInfoResult">
+        <result property="resumeId"    column="Resume_Id"    />
+        <result property="resumeUserid"    column="Resume_userId"    />
+        <result property="resumeName"    column="Resume_Name"    />
+        <result property="resumeBirth"    column="Resume_Birth"    />
+        <result property="resumeNation"    column="Resume_Nation"    />
+        <result property="resumeTelephone"    column="Resume_Telephone"    />
+        <result property="resumePoliticaloutlook"    column="Resume_PoliticalOutlook"    />
+        <result property="resumeEmail"    column="Resume_Email"    />
+        <result property="resumeSchool"    column="Resume_School"    />
+        <result property="resumeAddress"    column="Resume_Address"    />
+        <result property="resumeEducation"    column="Resume_Education"    />
+        <result property="resumeEducationalbackground"    column="Resume_EducationalBackground"    />
+        <result property="resumeInternshipexperience"    column="Resume_InternshipExperience"    />
+        <result property="resumeCampusexperience"    column="Resume_CampusExperience"    />
+        <result property="resumeSkillcertificate"    column="Resume_SkillCertificate"    />
+        <result property="resumeSelfevaluation"    column="Resume_SelfEvaluation"    />
+    </resultMap>
+
+    <sql id="selectResumeInfoVo">
+        select Resume_Id, Resume_userId, Resume_Name, Resume_Birth, Resume_Nation, Resume_Telephone, Resume_PoliticalOutlook, Resume_Email, Resume_School, Resume_Address, Resume_Education, Resume_EducationalBackground, Resume_InternshipExperience, Resume_CampusExperience, Resume_SkillCertificate, Resume_SelfEvaluation from resume_info
+    </sql>
+
+    <select id="selectResumeInfoList" parameterType="ResumeInfo" resultMap="ResumeInfoResult">
+        <include refid="selectResumeInfoVo"/>
+        <where>  
+            <if test="resumeUserid != null "> and Resume_userId = #{resumeUserid}</if>
+            <if test="resumeName != null  and resumeName != ''"> and Resume_Name like concat('%', #{resumeName}, '%')</if>
+            <if test="resumeBirth != null "> and Resume_Birth = #{resumeBirth}</if>
+            <if test="resumeNation != null  and resumeNation != ''"> and Resume_Nation = #{resumeNation}</if>
+            <if test="resumeTelephone != null  and resumeTelephone != ''"> and Resume_Telephone = #{resumeTelephone}</if>
+            <if test="resumePoliticaloutlook != null  and resumePoliticaloutlook != ''"> and Resume_PoliticalOutlook = #{resumePoliticaloutlook}</if>
+            <if test="resumeEmail != null  and resumeEmail != ''"> and Resume_Email = #{resumeEmail}</if>
+            <if test="resumeSchool != null  and resumeSchool != ''"> and Resume_School = #{resumeSchool}</if>
+            <if test="resumeAddress != null  and resumeAddress != ''"> and Resume_Address = #{resumeAddress}</if>
+            <if test="resumeEducation != null  and resumeEducation != ''"> and Resume_Education = #{resumeEducation}</if>
+            <if test="resumeEducationalbackground != null  and resumeEducationalbackground != ''"> and Resume_EducationalBackground = #{resumeEducationalbackground}</if>
+            <if test="resumeInternshipexperience != null  and resumeInternshipexperience != ''"> and Resume_InternshipExperience = #{resumeInternshipexperience}</if>
+            <if test="resumeCampusexperience != null  and resumeCampusexperience != ''"> and Resume_CampusExperience = #{resumeCampusexperience}</if>
+            <if test="resumeSkillcertificate != null  and resumeSkillcertificate != ''"> and Resume_SkillCertificate = #{resumeSkillcertificate}</if>
+            <if test="resumeSelfevaluation != null  and resumeSelfevaluation != ''"> and Resume_SelfEvaluation = #{resumeSelfevaluation}</if>
+        </where>
+    </select>
+    
+    <select id="selectResumeInfoByResumeId" parameterType="Long" resultMap="ResumeInfoResult">
+        <include refid="selectResumeInfoVo"/>
+        where Resume_Id = #{resumeId}
+    </select>
+        
+    <insert id="insertResumeInfo" parameterType="ResumeInfo" useGeneratedKeys="true" keyProperty="resumeId">
+        insert into resume_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="resumeUserid != null">Resume_userId,</if>
+            <if test="resumeName != null">Resume_Name,</if>
+            <if test="resumeBirth != null">Resume_Birth,</if>
+            <if test="resumeNation != null">Resume_Nation,</if>
+            <if test="resumeTelephone != null">Resume_Telephone,</if>
+            <if test="resumePoliticaloutlook != null">Resume_PoliticalOutlook,</if>
+            <if test="resumeEmail != null">Resume_Email,</if>
+            <if test="resumeSchool != null">Resume_School,</if>
+            <if test="resumeAddress != null">Resume_Address,</if>
+            <if test="resumeEducation != null">Resume_Education,</if>
+            <if test="resumeEducationalbackground != null">Resume_EducationalBackground,</if>
+            <if test="resumeInternshipexperience != null">Resume_InternshipExperience,</if>
+            <if test="resumeCampusexperience != null">Resume_CampusExperience,</if>
+            <if test="resumeSkillcertificate != null">Resume_SkillCertificate,</if>
+            <if test="resumeSelfevaluation != null">Resume_SelfEvaluation,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="resumeUserid != null">#{resumeUserid},</if>
+            <if test="resumeName != null">#{resumeName},</if>
+            <if test="resumeBirth != null">#{resumeBirth},</if>
+            <if test="resumeNation != null">#{resumeNation},</if>
+            <if test="resumeTelephone != null">#{resumeTelephone},</if>
+            <if test="resumePoliticaloutlook != null">#{resumePoliticaloutlook},</if>
+            <if test="resumeEmail != null">#{resumeEmail},</if>
+            <if test="resumeSchool != null">#{resumeSchool},</if>
+            <if test="resumeAddress != null">#{resumeAddress},</if>
+            <if test="resumeEducation != null">#{resumeEducation},</if>
+            <if test="resumeEducationalbackground != null">#{resumeEducationalbackground},</if>
+            <if test="resumeInternshipexperience != null">#{resumeInternshipexperience},</if>
+            <if test="resumeCampusexperience != null">#{resumeCampusexperience},</if>
+            <if test="resumeSkillcertificate != null">#{resumeSkillcertificate},</if>
+            <if test="resumeSelfevaluation != null">#{resumeSelfevaluation},</if>
+         </trim>
+    </insert>
+
+    <update id="updateResumeInfo" parameterType="ResumeInfo">
+        update resume_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="resumeUserid != null">Resume_userId = #{resumeUserid},</if>
+            <if test="resumeName != null">Resume_Name = #{resumeName},</if>
+            <if test="resumeBirth != null">Resume_Birth = #{resumeBirth},</if>
+            <if test="resumeNation != null">Resume_Nation = #{resumeNation},</if>
+            <if test="resumeTelephone != null">Resume_Telephone = #{resumeTelephone},</if>
+            <if test="resumePoliticaloutlook != null">Resume_PoliticalOutlook = #{resumePoliticaloutlook},</if>
+            <if test="resumeEmail != null">Resume_Email = #{resumeEmail},</if>
+            <if test="resumeSchool != null">Resume_School = #{resumeSchool},</if>
+            <if test="resumeAddress != null">Resume_Address = #{resumeAddress},</if>
+            <if test="resumeEducation != null">Resume_Education = #{resumeEducation},</if>
+            <if test="resumeEducationalbackground != null">Resume_EducationalBackground = #{resumeEducationalbackground},</if>
+            <if test="resumeInternshipexperience != null">Resume_InternshipExperience = #{resumeInternshipexperience},</if>
+            <if test="resumeCampusexperience != null">Resume_CampusExperience = #{resumeCampusexperience},</if>
+            <if test="resumeSkillcertificate != null">Resume_SkillCertificate = #{resumeSkillcertificate},</if>
+            <if test="resumeSelfevaluation != null">Resume_SelfEvaluation = #{resumeSelfevaluation},</if>
+        </trim>
+        where Resume_Id = #{resumeId}
+    </update>
+
+    <delete id="deleteResumeInfoByResumeId" parameterType="Long">
+        delete from resume_info where Resume_Id = #{resumeId}
+    </delete>
+
+    <delete id="deleteResumeInfoByResumeIds" parameterType="String">
+        delete from resume_info where Resume_Id in 
+        <foreach item="resumeId" collection="array" open="(" separator="," close=")">
+            #{resumeId}
+        </foreach>
+    </delete>
+</mapper>

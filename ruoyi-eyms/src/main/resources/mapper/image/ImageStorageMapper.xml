@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.image.mapper.ImageStorageMapper">
+    
+    <resultMap type="ImageStorage" id="ImageStorageResult">
+        <result property="imageId"    column="Image_Id"    />
+        <result property="imageUserid"    column="Image_UserId"    />
+        <result property="imageCompanyid"    column="Image_CompanyId"    />
+        <result property="imagePath"    column="Image_Path"    />
+        <result property="imageType"    column="Image_Type"    />
+    </resultMap>
+
+    <sql id="selectImageStorageVo">
+        select Image_Id, Image_UserId, Image_CompanyId, Image_Path, Image_Type from image_storage
+    </sql>
+
+    <select id="selectImageStorageList" parameterType="ImageStorage" resultMap="ImageStorageResult">
+        <include refid="selectImageStorageVo"/>
+        <where>  
+            <if test="imageUserid != null "> and Image_UserId = #{imageUserid}</if>
+            <if test="imageCompanyid != null "> and Image_CompanyId = #{imageCompanyid}</if>
+            <if test="imagePath != null  and imagePath != ''"> and Image_Path = #{imagePath}</if>
+            <if test="imageType != null  and imageType != ''"> and Image_Type = #{imageType}</if>
+        </where>
+    </select>
+    
+    <select id="selectImageStorageByImageId" parameterType="Long" resultMap="ImageStorageResult">
+        <include refid="selectImageStorageVo"/>
+        where Image_Id = #{imageId}
+    </select>
+        
+    <insert id="insertImageStorage" parameterType="ImageStorage" useGeneratedKeys="true" keyProperty="imageId">
+        insert into image_storage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="imageUserid != null">Image_UserId,</if>
+            <if test="imageCompanyid != null">Image_CompanyId,</if>
+            <if test="imagePath != null">Image_Path,</if>
+            <if test="imageType != null">Image_Type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="imageUserid != null">#{imageUserid},</if>
+            <if test="imageCompanyid != null">#{imageCompanyid},</if>
+            <if test="imagePath != null">#{imagePath},</if>
+            <if test="imageType != null">#{imageType},</if>
+         </trim>
+    </insert>
+
+    <update id="updateImageStorage" parameterType="ImageStorage">
+        update image_storage
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="imageUserid != null">Image_UserId = #{imageUserid},</if>
+            <if test="imageCompanyid != null">Image_CompanyId = #{imageCompanyid},</if>
+            <if test="imagePath != null">Image_Path = #{imagePath},</if>
+            <if test="imageType != null">Image_Type = #{imageType},</if>
+        </trim>
+        where Image_Id = #{imageId}
+    </update>
+
+    <delete id="deleteImageStorageByImageId" parameterType="Long">
+        delete from image_storage where Image_Id = #{imageId}
+    </delete>
+
+    <delete id="deleteImageStorageByImageIds" parameterType="String">
+        delete from image_storage where Image_Id in 
+        <foreach item="imageId" collection="array" open="(" separator="," close=")">
+            #{imageId}
+        </foreach>
+    </delete>
+</mapper>

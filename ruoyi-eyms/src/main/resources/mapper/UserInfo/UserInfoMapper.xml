@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.userInfo.mapper.UserInfoMapper">
+    
+    <resultMap type="UserInfo" id="UserInfoResult">
+        <result property="userId"    column="User_ID"    />
+        <result property="userName"    column="User_Name"    />
+        <result property="userPassword"    column="User_Password"    />
+        <result property="userSchool"    column="User_School"    />
+        <result property="userSex"    column="User_Sex"    />
+        <result property="userTelephone"    column="User_Telephone"    />
+        <result property="userEmail"    column="User_Email"    />
+        <result property="userMajor"    column="User_Major"    />
+        <result property="userUsername"    column="User_Username"    />
+        <result property="userIntroduce"    column="User_Introduce"    />
+    </resultMap>
+
+    <sql id="selectUserInfoVo">
+        select User_ID, User_Name, User_Password, User_School, User_Sex, User_Telephone, User_Email, User_Major, User_Username, User_Introduce from user_info
+    </sql>
+
+    <select id="selectUserInfoList" parameterType="UserInfo" resultMap="UserInfoResult">
+        <include refid="selectUserInfoVo"/>
+        <where>  
+            <if test="userName != null  and userName != ''"> and User_Name like concat('%', #{userName}, '%')</if>
+            <if test="userPassword != null  and userPassword != ''"> and User_Password = #{userPassword}</if>
+            <if test="userSchool != null  and userSchool != ''"> and User_School = #{userSchool}</if>
+            <if test="userSex != null  and userSex != ''"> and User_Sex = #{userSex}</if>
+            <if test="userTelephone != null  and userTelephone != ''"> and User_Telephone = #{userTelephone}</if>
+            <if test="userEmail != null  and userEmail != ''"> and User_Email = #{userEmail}</if>
+            <if test="userMajor != null  and userMajor != ''"> and User_Major = #{userMajor}</if>
+            <if test="userUsername != null  and userUsername != ''"> and User_Username like concat('%', #{userUsername}, '%')</if>
+            <if test="userIntroduce != null  and userIntroduce != ''"> and User_Introduce = #{userIntroduce}</if>
+        </where>
+    </select>
+    
+    <select id="selectUserInfoByUserId" parameterType="Long" resultMap="UserInfoResult">
+        <include refid="selectUserInfoVo"/>
+        where User_ID = #{userId}
+    </select>
+        
+    <insert id="insertUserInfo" parameterType="UserInfo" useGeneratedKeys="true" keyProperty="userId">
+        insert into user_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userName != null">User_Name,</if>
+            <if test="userPassword != null">User_Password,</if>
+            <if test="userSchool != null">User_School,</if>
+            <if test="userSex != null">User_Sex,</if>
+            <if test="userTelephone != null">User_Telephone,</if>
+            <if test="userEmail != null">User_Email,</if>
+            <if test="userMajor != null">User_Major,</if>
+            <if test="userUsername != null">User_Username,</if>
+            <if test="userIntroduce != null">User_Introduce,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userName != null">#{userName},</if>
+            <if test="userPassword != null">#{userPassword},</if>
+            <if test="userSchool != null">#{userSchool},</if>
+            <if test="userSex != null">#{userSex},</if>
+            <if test="userTelephone != null">#{userTelephone},</if>
+            <if test="userEmail != null">#{userEmail},</if>
+            <if test="userMajor != null">#{userMajor},</if>
+            <if test="userUsername != null">#{userUsername},</if>
+            <if test="userIntroduce != null">#{userIntroduce},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUserInfo" parameterType="UserInfo">
+        update user_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userName != null">User_Name = #{userName},</if>
+            <if test="userPassword != null">User_Password = #{userPassword},</if>
+            <if test="userSchool != null">User_School = #{userSchool},</if>
+            <if test="userSex != null">User_Sex = #{userSex},</if>
+            <if test="userTelephone != null">User_Telephone = #{userTelephone},</if>
+            <if test="userEmail != null">User_Email = #{userEmail},</if>
+            <if test="userMajor != null">User_Major = #{userMajor},</if>
+            <if test="userUsername != null">User_Username = #{userUsername},</if>
+            <if test="userIntroduce != null">User_Introduce = #{userIntroduce},</if>
+        </trim>
+        where User_ID = #{userId}
+    </update>
+
+    <delete id="deleteUserInfoByUserId" parameterType="Long">
+        delete from user_info where User_ID = #{userId}
+    </delete>
+
+    <delete id="deleteUserInfoByUserIds" parameterType="String">
+        delete from user_info where User_ID in 
+        <foreach item="userId" collection="array" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </delete>
+</mapper>

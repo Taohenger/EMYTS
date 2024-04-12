@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.position.mapper.PositionInfoMapper">
+    
+    <resultMap type="PositionInfo" id="PositionInfoResult">
+        <result property="positionId"    column="Position_Id"    />
+        <result property="positionName"    column="Position_Name"    />
+        <result property="positionNumber"    column="Position_Number"    />
+        <result property="positionJobrequirements"    column="Position_JobRequirements"    />
+        <result property="positionCompanyname"    column="Position_CompanyName"    />
+        <result property="positionCompanyid"    column="Position_CompanyId"    />
+    </resultMap>
+
+    <sql id="selectPositionInfoVo">
+        select Position_Id, Position_Name, Position_Number, Position_JobRequirements, Position_CompanyName, Position_CompanyId from position_info
+    </sql>
+
+    <select id="selectPositionInfoList" parameterType="PositionInfo" resultMap="PositionInfoResult">
+        <include refid="selectPositionInfoVo"/>
+        <where>  
+            <if test="positionName != null  and positionName != ''"> and Position_Name like concat('%', #{positionName}, '%')</if>
+            <if test="positionNumber != null  and positionNumber != ''"> and Position_Number = #{positionNumber}</if>
+            <if test="positionJobrequirements != null  and positionJobrequirements != ''"> and Position_JobRequirements = #{positionJobrequirements}</if>
+            <if test="positionCompanyname != null  and positionCompanyname != ''"> and Position_CompanyName like concat('%', #{positionCompanyname}, '%')</if>
+            <if test="positionCompanyid != null "> and Position_CompanyId = #{positionCompanyid}</if>
+        </where>
+    </select>
+    
+    <select id="selectPositionInfoByPositionId" parameterType="Long" resultMap="PositionInfoResult">
+        <include refid="selectPositionInfoVo"/>
+        where Position_Id = #{positionId}
+    </select>
+        
+    <insert id="insertPositionInfo" parameterType="PositionInfo" useGeneratedKeys="true" keyProperty="positionId">
+        insert into position_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="positionName != null">Position_Name,</if>
+            <if test="positionNumber != null">Position_Number,</if>
+            <if test="positionJobrequirements != null">Position_JobRequirements,</if>
+            <if test="positionCompanyname != null">Position_CompanyName,</if>
+            <if test="positionCompanyid != null">Position_CompanyId,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="positionName != null">#{positionName},</if>
+            <if test="positionNumber != null">#{positionNumber},</if>
+            <if test="positionJobrequirements != null">#{positionJobrequirements},</if>
+            <if test="positionCompanyname != null">#{positionCompanyname},</if>
+            <if test="positionCompanyid != null">#{positionCompanyid},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePositionInfo" parameterType="PositionInfo">
+        update position_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="positionName != null">Position_Name = #{positionName},</if>
+            <if test="positionNumber != null">Position_Number = #{positionNumber},</if>
+            <if test="positionJobrequirements != null">Position_JobRequirements = #{positionJobrequirements},</if>
+            <if test="positionCompanyname != null">Position_CompanyName = #{positionCompanyname},</if>
+            <if test="positionCompanyid != null">Position_CompanyId = #{positionCompanyid},</if>
+        </trim>
+        where Position_Id = #{positionId}
+    </update>
+
+    <delete id="deletePositionInfoByPositionId" parameterType="Long">
+        delete from position_info where Position_Id = #{positionId}
+    </delete>
+
+    <delete id="deletePositionInfoByPositionIds" parameterType="String">
+        delete from position_info where Position_Id in 
+        <foreach item="positionId" collection="array" open="(" separator="," close=")">
+            #{positionId}
+        </foreach>
+    </delete>
+</mapper>

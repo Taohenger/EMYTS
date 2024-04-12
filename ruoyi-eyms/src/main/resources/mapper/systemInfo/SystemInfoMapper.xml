@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.systemInfo.mapper.SystemInfoMapper">
+    
+    <resultMap type="SystemInfo" id="SystemInfoResult">
+        <result property="systemId"    column="System_Id"    />
+        <result property="systemName"    column="System_Name"    />
+        <result property="systemLogo"    column="System_Logo"    />
+        <result property="systemCarousel"    column="System_Carousel"    />
+        <result property="systemAboutus"    column="System_AboutUS"    />
+        <result property="systemContactus"    column="System_ContactUS"    />
+        <result property="systemPrivacypolicy"    column="System_PrivacyPolicy"    />
+        <result property="systemTermsofservice"    column="System_TermsOfService"    />
+    </resultMap>
+
+    <sql id="selectSystemInfoVo">
+        select System_Id, System_Name, System_Logo, System_Carousel, System_AboutUS, System_ContactUS, System_PrivacyPolicy, System_TermsOfService from system_info
+    </sql>
+
+    <select id="selectSystemInfoList" parameterType="SystemInfo" resultMap="SystemInfoResult">
+        <include refid="selectSystemInfoVo"/>
+        <where>  
+            <if test="systemName != null  and systemName != ''"> and System_Name like concat('%', #{systemName}, '%')</if>
+            <if test="systemLogo != null  and systemLogo != ''"> and System_Logo = #{systemLogo}</if>
+            <if test="systemCarousel != null  and systemCarousel != ''"> and System_Carousel = #{systemCarousel}</if>
+            <if test="systemAboutus != null  and systemAboutus != ''"> and System_AboutUS = #{systemAboutus}</if>
+            <if test="systemContactus != null  and systemContactus != ''"> and System_ContactUS = #{systemContactus}</if>
+            <if test="systemPrivacypolicy != null  and systemPrivacypolicy != ''"> and System_PrivacyPolicy = #{systemPrivacypolicy}</if>
+            <if test="systemTermsofservice != null  and systemTermsofservice != ''"> and System_TermsOfService = #{systemTermsofservice}</if>
+        </where>
+    </select>
+    
+    <select id="selectSystemInfoBySystemId" parameterType="Long" resultMap="SystemInfoResult">
+        <include refid="selectSystemInfoVo"/>
+        where System_Id = #{systemId}
+    </select>
+        
+    <insert id="insertSystemInfo" parameterType="SystemInfo" useGeneratedKeys="true" keyProperty="systemId">
+        insert into system_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="systemName != null">System_Name,</if>
+            <if test="systemLogo != null">System_Logo,</if>
+            <if test="systemCarousel != null">System_Carousel,</if>
+            <if test="systemAboutus != null">System_AboutUS,</if>
+            <if test="systemContactus != null">System_ContactUS,</if>
+            <if test="systemPrivacypolicy != null">System_PrivacyPolicy,</if>
+            <if test="systemTermsofservice != null">System_TermsOfService,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="systemName != null">#{systemName},</if>
+            <if test="systemLogo != null">#{systemLogo},</if>
+            <if test="systemCarousel != null">#{systemCarousel},</if>
+            <if test="systemAboutus != null">#{systemAboutus},</if>
+            <if test="systemContactus != null">#{systemContactus},</if>
+            <if test="systemPrivacypolicy != null">#{systemPrivacypolicy},</if>
+            <if test="systemTermsofservice != null">#{systemTermsofservice},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSystemInfo" parameterType="SystemInfo">
+        update system_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="systemName != null">System_Name = #{systemName},</if>
+            <if test="systemLogo != null">System_Logo = #{systemLogo},</if>
+            <if test="systemCarousel != null">System_Carousel = #{systemCarousel},</if>
+            <if test="systemAboutus != null">System_AboutUS = #{systemAboutus},</if>
+            <if test="systemContactus != null">System_ContactUS = #{systemContactus},</if>
+            <if test="systemPrivacypolicy != null">System_PrivacyPolicy = #{systemPrivacypolicy},</if>
+            <if test="systemTermsofservice != null">System_TermsOfService = #{systemTermsofservice},</if>
+        </trim>
+        where System_Id = #{systemId}
+    </update>
+
+    <delete id="deleteSystemInfoBySystemId" parameterType="Long">
+        delete from system_info where System_Id = #{systemId}
+    </delete>
+
+    <delete id="deleteSystemInfoBySystemIds" parameterType="String">
+        delete from system_info where System_Id in 
+        <foreach item="systemId" collection="array" open="(" separator="," close=")">
+            #{systemId}
+        </foreach>
+    </delete>
+</mapper>

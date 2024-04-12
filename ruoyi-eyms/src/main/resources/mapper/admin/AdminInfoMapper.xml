@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.admin.mapper.AdminInfoMapper">
+    
+    <resultMap type="AdminInfo" id="AdminInfoResult">
+        <result property="adminId"    column="Admin_Id"    />
+        <result property="adminName"    column="Admin_Name"    />
+        <result property="adminUsername"    column="Admin_Username"    />
+        <result property="adminPassword"    column="Admin_Password"    />
+    </resultMap>
+
+    <sql id="selectAdminInfoVo">
+        select Admin_Id, Admin_Name, Admin_Username, Admin_Password from admin_info
+    </sql>
+
+    <select id="selectAdminInfoList" parameterType="AdminInfo" resultMap="AdminInfoResult">
+        <include refid="selectAdminInfoVo"/>
+        <where>  
+            <if test="adminName != null  and adminName != ''"> and Admin_Name like concat('%', #{adminName}, '%')</if>
+            <if test="adminUsername != null  and adminUsername != ''"> and Admin_Username like concat('%', #{adminUsername}, '%')</if>
+            <if test="adminPassword != null  and adminPassword != ''"> and Admin_Password = #{adminPassword}</if>
+        </where>
+    </select>
+    
+    <select id="selectAdminInfoByAdminId" parameterType="Long" resultMap="AdminInfoResult">
+        <include refid="selectAdminInfoVo"/>
+        where Admin_Id = #{adminId}
+    </select>
+        
+    <insert id="insertAdminInfo" parameterType="AdminInfo" useGeneratedKeys="true" keyProperty="adminId">
+        insert into admin_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="adminName != null">Admin_Name,</if>
+            <if test="adminUsername != null">Admin_Username,</if>
+            <if test="adminPassword != null">Admin_Password,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="adminName != null">#{adminName},</if>
+            <if test="adminUsername != null">#{adminUsername},</if>
+            <if test="adminPassword != null">#{adminPassword},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAdminInfo" parameterType="AdminInfo">
+        update admin_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="adminName != null">Admin_Name = #{adminName},</if>
+            <if test="adminUsername != null">Admin_Username = #{adminUsername},</if>
+            <if test="adminPassword != null">Admin_Password = #{adminPassword},</if>
+        </trim>
+        where Admin_Id = #{adminId}
+    </update>
+
+    <delete id="deleteAdminInfoByAdminId" parameterType="Long">
+        delete from admin_info where Admin_Id = #{adminId}
+    </delete>
+
+    <delete id="deleteAdminInfoByAdminIds" parameterType="String">
+        delete from admin_info where Admin_Id in 
+        <foreach item="adminId" collection="array" open="(" separator="," close=")">
+            #{adminId}
+        </foreach>
+    </delete>
+</mapper>
